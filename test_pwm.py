@@ -5,8 +5,8 @@ import RPi.GPIO as GPIO   # Import the GPIO library.
 import time               # Import time library
 import socket
 
-HOST = '192.168.43.166'
-PORT = 5678
+HOST = '192.168.100.47'
+PORT = 1234
 
 motor_A_0 = 16
 motor_A_1 = 18
@@ -55,6 +55,72 @@ def move_backward(speed):
 	pwm_A.ChangeDutyCycle(speed)
 	pwm_B.ChangeDutyCycle(speed)
 
+def move_to_the_left_forward(speed):
+	global motor_A_0
+	global motor_A_1
+	global motor_B_0
+	global motor_B_1
+	global pwm_A
+	global pwm_B
+
+	GPIO.output(motor_A_0, GPIO.HIGH)
+	GPIO.output(motor_A_1, GPIO.LOW)
+	GPIO.output(motor_B_0, GPIO.HIGH)
+	GPIO.output(motor_B_1, GPIO.LOW)
+
+	pwm_A.ChangeDutyCycle(speed-10)
+	pwm_B.ChangeDutyCycle(speed)
+
+def move_to_the_right_forward(speed):
+	global motor_A_0
+	global motor_A_1
+	global motor_B_0
+	global motor_B_1
+	global pwm_A
+	global pwm_B
+
+	GPIO.output(motor_A_0, GPIO.HIGH)
+	GPIO.output(motor_A_1, GPIO.LOW)
+	GPIO.output(motor_B_0, GPIO.HIGH)
+	GPIO.output(motor_B_1, GPIO.LOW)
+
+	pwm_A.ChangeDutyCycle(speed)
+	pwm_B.ChangeDutyCycle(speed-10)
+
+def move_to_the_left_backward(speed):
+        global motor_A_0
+        global motor_A_1
+        global motor_B_0
+        global motor_B_1
+        global pwm_A
+        global pwm_B
+
+        GPIO.output(motor_A_0, GPIO.LOW)
+        GPIO.output(motor_A_1, GPIO.HIGH)
+        GPIO.output(motor_B_0, GPIO.LOW)
+        GPIO.output(motor_B_1, GPIO.HIGH)
+
+        pwm_A.ChangeDutyCycle(speed-10)
+        pwm_B.ChangeDutyCycle(speed)
+
+def move_to_the_right_backward(speed):
+        global motor_A_0
+        global motor_A_1
+        global motor_B_0
+        global motor_B_1
+        global pwm_A
+        global pwm_B
+
+        GPIO.output(motor_A_0, GPIO.LOW)
+        GPIO.output(motor_A_1, GPIO.HIGH)
+        GPIO.output(motor_B_0, GPIO.LOW)
+        GPIO.output(motor_B_1, GPIO.HIGH)
+
+        pwm_A.ChangeDutyCycle(speed)
+        pwm_B.ChangeDutyCycle(speed-10)
+
+
+
 def init():
 	global motor_A_0
 	global motor_A_1
@@ -95,6 +161,8 @@ def close_socket(sock):
     if sock is not None:
         sock.close()
 
+directions = set()
+
 def main():
 	init()
 
@@ -107,25 +175,54 @@ def main():
 
 	server_socket = None
 	conn = None
+	speed = 50
 
 	try:
 		server_socket = create_and_bind_server_socket(SERVER_IP=HOST, PORT=PORT)
 
 		conn, addr = server_socket.accept()
 		while True:
-			received_data = conn.recv(1024).decode()
+			received_message = conn.recv(1024).decode()
 
-			if not received_data or "esc" in received_data:
+			if not received_message or "esc" in received_message:
 				break
 
 			# DO SOMETHING WITH DATA
-			print(received_data)
+			print("Mesaj primit: " + received_message)
 
-			if received_data == 'w:pressed':
-				move_forward(50)
+			command = received_message.split(':')
+			key = command[0]
+			state = command[1]
 
-			if received_data.split(':')[1] == 'released':
-				stop_motors()
+			if state == "pressed" and len(directions) <= 2:
+				if not (('w' in directions and key == 's') or ('s' in directions and key == 'w') or ('a' in directions and key == 'd') or ('d' in directions and key == 'a')):
+					directions.add(key)
+
+			if state == "released" and key in directions:
+				directions.remove(key)
+
+			print(directions)
+
+			if "w" in directions and "a" in directions:
+				move_to_the_left_forward(speed)
+
+			if "w" in directions and "d" in directions:
+				move_to_the_right_forward(speed)
+
+			if "s" in directions and "a" in directions:
+				move_to_the_left_backward(speed)
+
+			if "s" in directions and "d" in directions:
+				move_to_the_right_backward(speed)
+			
+			if "w" in directions:
+				move_forward(speed)
+
+			if "s" in directions:
+                                move_backward(speed)
+
+			if len(directions) == 0:
+			 	stop_motors()
 
 	except Exception as ex:
 		print(ex)
@@ -137,3 +234,4 @@ def main():
 
 if __name__ == '__main__':
 	main()
+
