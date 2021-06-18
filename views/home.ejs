@@ -1,0 +1,53 @@
+<div class="remote">
+    <h1 style="color:darkblue;">Remote</h1>
+
+    <button type="button" class="start">Start</button>
+    <button type="button" class="stop">Stop</button>
+    <br>
+    <br>
+    <div class="left">
+        <b style="color:black;">Manual</b>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider round"></span>
+        </label>
+        <b style="color:black;">Automatic</b>
+        <br>
+        <br>
+        <b style="color:yellow;">Daytime running lights</b>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider round"></span>
+        </label>
+        <br>
+        <br>
+        <b style="color:red;">Brake lights ...</b>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider round"></span>
+        </label>
+        <br>
+        <br>
+        <label>PWM: </label>
+        <input type="range">
+        <br>
+        <br>
+        <b style="color:orange;">Signal lights</b>
+        <button type="button" class="directionLights"><i class="fa fa-arrow-left fa-2x"></i></button>
+        <button type="button" class="directionLights"><i class="fa fa-arrow-right fa-2x"></i></button>
+
+    </div>
+    <div class="right">
+        <button type="button" id="moveForward" class="btn" onmousedown="moveForwardPressed()" onmouseup="moveForwardReleased()"><i class="fa fa-arrow-circle-up fa-4x"></i></button>
+        <br>
+        <button type="button" id="moveToTheLeft" class="btn"onmousedown="moveToTheLeftPressed()" onmouseup="moveToTheLeftReleased()"><i class="fa fa-arrow-circle-left fa-4x"></i></button>
+        <button type="button" class="btn-center"><i class="fa fa-square-o fa-4x"></i></button>
+        <button type="button" id="moveToTheRight" class="btn"onmousedown="moveToTheRightPressed()" onmouseup="moveToTheRightReleased()"><i class="fa fa-arrow-circle-right fa-4x"></i></button>
+        <br>
+        <button type="button" id="moveBackward"class="btn"onmousedown="moveBackwardPressed()" onmouseup="moveBackwardReleased()"><i class="fa fa-arrow-circle-down fa-4x"></i></button>
+        <br>
+        <br>
+        Informations about movement:
+        <textarea></textarea>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+[
+    {
+        "intrebare":"1.C++ este un limbaj de programare:",
+        "variante": ["Compilat", "Interpretat", "Compilat si interpretat", "Nu stiu.."],
+        "corect": 0
+    },
+    {
+        "intrebare": "2.Python este un limbaj de programare:",
+        "variante": ["Compilat", "Interpretat", "Compilat si interpretat", "Nu stiu.."],
+        "corect": 1
+    },
+    {
+        "intrebare": "3.C este un limbaj de programare:",
+        "variante": ["Compilat", "Interpretat", "Compilat si interpretat", "Nu stiu.."],
+        "corect": 0
+    },
+    {
+        "intrebare": "4.Java este un limbaj de programare:",
+        "variante": ["Compilat", "Interpretat", "Compilat si interpretat", "Nu stiu.."],
+        "corect": 2
+    }
+]

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ro-RO">
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="../script.js"></script>
+
+    <meta charset=utf-8>
+    <link rel="stylesheet" type="text/css" href="css/style2.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+
+</head>
+
+<body>
+    <div class="wrapper" style="display: block;">
+        <div class="header">
+            <h1>Autonomous Car</h1>
+        </div>
+        <div class="main">
+            <main id="continut">
+                <%- body %>
+            </main>
+
+            <footer>
+                &copy;Dima Raul Andrei. 2021 . Autonomous Car
+            </footer>
+
+        </div>
+    </div>
+    <script>
+        
+    </script>
+</body>
+
+</html>
