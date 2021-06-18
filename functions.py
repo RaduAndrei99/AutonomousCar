@@ -25,6 +25,7 @@ pwm_B = GPIO.PWM(pwm_motor_B, 1000)
 
 
 def move_forward(speed):
+    prepare()
     global motor_A_0
     global motor_A_1
     global motor_B_0
@@ -39,7 +40,8 @@ def move_forward(speed):
 
     pwm_A.ChangeDutyCycle(speed)
     pwm_B.ChangeDutyCycle(speed)
-
+    while True:
+        pass
 
 def move_backward(speed):
     global motor_A_0
