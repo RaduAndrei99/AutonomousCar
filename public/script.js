@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function start()
 {
+    console.log("start");
     socket.emit('commands', "start:start")
 }
 function moveForwardPressed() {

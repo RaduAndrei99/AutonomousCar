@@ -93,7 +93,7 @@ io.on('connection', (socket) => {
 			}
 		}
 		else if (command[1] == "released") {
-			const childPython = child_process.spawn('python', ['-c', 'import /functions; functions.stop_motors()']);
+			const childPython = child_process.spawn('python', ['-c', 'import functions; functions.stop_motors()']);
 			childPython.stdout.on('data', function (data) {
 				console.log(`stdout:${data}`);
 				//dataToSend = data.toString();
