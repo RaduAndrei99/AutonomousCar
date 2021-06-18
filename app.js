@@ -55,11 +55,27 @@ app.get('/home', (req, res) => {
 io.on('connection', (socket) => {
 	console.log('A user connected');
 	socket.on('commands', (msg) => {
-		console.log('message: ' + command[0]);
 		var command = msg.split(':')
-		if (command[1] == "pressed") {
+		console.log('message: ' + command[0]);
+		if (command[0] == "start") {
+			const childPython = child_process.spawn('python', ['-c', 'import functions; functions.prepare()']);
+			childPython.stdout.on('data', function (data) {
+				console.log(`stdout:${data}`);
+				//dataToSend = data.toString();
+			});
+
+			childPython.stderr.on('data', function (data) {
+				console.log(`stderr:${data}`);
+				//dataToSend += data.toString();
+			});
+
+			childPython.on('close', (code) => {
+				console.log(`child process close all stdio with code ${code}`);
+				//console.log(data);
+			});
+		} else if (command[1] == "pressed") {
 			if (command[0] == "w") {
-				const childPython = child_process.spawn('python', ['-c', 'import ./PyhtonCode/functions; move_forward()']);
+				const childPython = child_process.spawn('python', ['-c', 'import functions; functions.move_forward(50)']);
 				childPython.stdout.on('data', function (data) {
 					console.log(`stdout:${data}`);
 					//dataToSend = data.toString();
@@ -77,7 +93,7 @@ io.on('connection', (socket) => {
 			}
 		}
 		else if (command[1] == "released") {
-			const childPython = child_process.spawn('python', ['-c', 'import ./PyhtonCode/functions; stop_motors()']);
+			const childPython = child_process.spawn('python', ['-c', 'import /functions; functions.stop_motors()']);
 			childPython.stdout.on('data', function (data) {
 				console.log(`stdout:${data}`);
 				//dataToSend = data.toString();

@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+function start()
+{
+    socket.emit('commands', "start:start")
+}
 function moveForwardPressed() {
     console.log("go forward");
     socket.emit('commands', "w:pressed")
