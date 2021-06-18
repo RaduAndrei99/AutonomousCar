@@ -3,7 +3,7 @@
 
 import RPi.GPIO as GPIO   # Import the GPIO library.
 import time               # Import time library
-import socket
+from server import Server
 
 HOST = '192.168.100.47'
 PORT = 1234
@@ -119,8 +119,6 @@ def move_to_the_right_backward(speed):
         pwm_A.ChangeDutyCycle(speed)
         pwm_B.ChangeDutyCycle(speed-10)
 
-
-
 def init():
 	global motor_A_0
 	global motor_A_1
@@ -148,19 +146,6 @@ def stop_motors():
 	pwm_A.ChangeDutyCycle(0)
 	pwm_B.ChangeDutyCycle(0)
 
-
-def create_and_bind_server_socket(SERVER_IP, PORT, CONCURENT_CONNECTIONS=1):
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((SERVER_IP, PORT))
-    print("S-a facut bind la " + str((SERVER_IP, PORT)))
-
-    server_socket.listen(CONCURENT_CONNECTIONS)
-    return server_socket
-
-def close_socket(sock):
-    if sock is not None:
-        sock.close()
-
 directions = set()
 
 def main():
@@ -173,16 +158,17 @@ def main():
 	pwm_A.start(dc)                      # Start PWM with 0% duty cycle
 	pwm_B.start(dc)
 
+	server = None
 	server_socket = None
 	conn = None
 	speed = 50
 
 	try:
-		server_socket = create_and_bind_server_socket(SERVER_IP=HOST, PORT=PORT)
+		server = Server(SERVER_IP=HOST, PORT=PORT)
+		conn, addr = server.accept_connection()
 
-		conn, addr = server_socket.accept()
 		while True:
-			received_message = conn.recv(1024).decode()
+			received_message = server.receive_message()
 
 			if not received_message or "esc" in received_message:
 				break
