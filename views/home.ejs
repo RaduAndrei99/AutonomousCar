@@ -1,30 +1,32 @@
 <div class="remote">
-    <h1 style="color:darkblue;">Remote</h1>
-
-    <button type="button" class="start" onclick="start()">Start</button>
-    <button type="button" class="stop">Stop</button>
+    <h1>Remote</h1>
+    <div class="buttons">
+        <button type="button" class="start" onclick="start()">Start</button>
+        <button type="button" class="stop">Stop</button>
+    </div>
+    
     <br>
     <br>
-    <div class="left">
-        <b style="color:black;">Manual</b>
+    <div class="left col-1">
+        <b style="color:dodgerblue;">Manual</b>
         <label class="switch">
             <input type="checkbox">
-            <span class="slider round"></span>
+            <span class="slider round blue"></span>
         </label>
-        <b style="color:black;">Automatic</b>
+        <b style="color:dodgerblue;">Automatic</b>
         <br>
         <br>
         <b style="color:yellow;">Daytime running lights</b>
         <label class="switch">
             <input type="checkbox">
-            <span class="slider round"></span>
+            <span class="slider round yellow"></span>
         </label>
         <br>
         <br>
         <b style="color:red;">Brake lights ...</b>
         <label class="switch">
             <input type="checkbox">
-            <span class="slider round"></span>
+            <span class="slider round red"></span>
         </label>
         <br>
         <br>
@@ -37,17 +39,37 @@
         <button type="button" class="directionLights"><i class="fa fa-arrow-right fa-2x"></i></button>
 
     </div>
-    <div class="right">
-        <button type="button" id="moveForward" class="btn" onmousedown="moveForwardPressed()" onmouseup="moveForwardReleased()"><i class="fa fa-arrow-circle-up fa-4x"></i></button>
+    <div class="right col-2">
+        <button type="button" id="moveForward" class="btn up" onmousedown="moveForwardPressed()" onmouseup="moveForwardReleased()"><i class="fa fa-arrow-circle-up fa-4x"></i></button>
         <br>
         <button type="button" id="moveToTheLeft" class="btn" onmousedown="moveToTheLeftPressed()" onmouseup="moveToTheLeftReleased()"><i class="fa fa-arrow-circle-left fa-4x"></i></button>
         <button type="button" class="btn-center"><i class="fa fa-square-o fa-4x"></i></button>
         <button type="button" id="moveToTheRight" class="btn" onmousedown="moveToTheRightPressed()" onmouseup="moveToTheRightReleased()"><i class="fa fa-arrow-circle-right fa-4x"></i></button>
         <br>
-        <button type="button" id="moveBackward"class="btn" onmousedown="moveBackwardPressed()" onmouseup="moveBackwardReleased()"><i class="fa fa-arrow-circle-down fa-4x"></i></button>
+        <button type="button" id="moveBackward"class="btn down" onmousedown="moveBackwardPressed()" onmouseup="moveBackwardReleased()"><i class="fa fa-arrow-circle-down fa-4x"></i></button>
         <br>
         <br>
-        Informations about movement:
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="movement col-3">
+        Informations about movement:<br>
         <textarea></textarea>
+    </div>
+    <br>
+    <div class="images">
+        Real time captions:
+        <div class="captions">
+        </div>
     </div>
 </div>

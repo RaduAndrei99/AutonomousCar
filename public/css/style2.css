@@ -6,8 +6,6 @@ body{
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
-
-
 footer {
     position: fixed;
     left: 0;
@@ -19,8 +17,8 @@ footer {
     z-index: 1;
 }
 
-.remote {
-    text-align: center;
+textarea {
+    width: 100%;
 }
 
 .btn {
@@ -31,6 +29,16 @@ footer {
     font-size: 16px;
     cursor: pointer;
     border-radius: 20px;
+}
+
+.up {
+    margin-right: 95px;
+    margin-bottom: 7px;
+}
+
+.down {
+    margin-right: 95px;
+    margin-top: 7px;
 }
 
 .btn-center {
@@ -47,12 +55,16 @@ footer {
     background-color: royalblue;
 }
 
+.buttons{
+    padding-left: 200px;
+}
+
 .start {
     background-color: lawngreen;
     border: 2px solid black;
     color: black;
-    padding: 12px 16px;
-    font-size: 16px;
+    padding: 12px 56px;
+    font-size: 26px;
     cursor: pointer;
     border-radius: 20px;
     border-color: black;
@@ -66,8 +78,8 @@ footer {
     background-color: red;
     border: 2px solid black;
     color: white;
-    padding: 12px 16px;
-    font-size: 16px;
+    padding: 12px 56px;
+    font-size: 26px;
     cursor: pointer;
     border-radius: 20px;
     border-color: black;
@@ -89,6 +101,15 @@ footer {
 
 .directionLights:hover {
     background-color: peru;
+}
+
+.directionLights:active{
+    animation: example 1s infinite;
+}
+
+@keyframes example {
+    0%   {background-color: orange;}
+    100% {background-color: lime;}
 }
 
 .switch {
@@ -128,15 +149,30 @@ footer {
     transition: .4s;
 }
 
-input:checked+.slider {
+input:checked + .blue{
     background-color: #2196F3;
 }
 
-input:focus+.slider {
+input:focus + .blue {
     box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked+.slider:before {
+input:checked + .yellow{
+    background-color: yellow;
+}
+
+input:focus + .yellow {
+    box-shadow: 0 0 1px yellow;
+}
+
+input:checked + .red{
+    background-color: red;
+}
+
+input:focus + .red {
+    box-shadow: 0 0 1px red;
+}
+input:checked + .slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
@@ -151,13 +187,19 @@ input:checked+.slider:before {
 }
 
 div.left {
-    padding-left: 350px;
+    padding-left: 50px;
     text-align: left;
 }
 
 div.right {
     margin-top: -350px;
-    padding-left: 600px;
+    text-align: right;
+    margin-right: 1100px;
+}
+
+.movement {
+    text-align: left;
+    margin-top: -400px;
 }
 
 #chat {
@@ -214,4 +256,51 @@ div.right {
 
 #messages>li:nth-child(odd) {
     background: #efefef;
+}
+
+.images{
+    margin-top: -500px;
+    text-align: center;
+}
+
+div.header > h1{
+    text-align: center; 
+    font-size: 70px;
+    color: lightskyblue
+}
+
+div.remote > h1 {
+    color:white; 
+    padding-left: 170px; 
+    font-size:76px;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  [class*="col-"] {
+    width: 100%;
+  }
+  .left{
+      font-size:20px;
+  }
+  .right{
+      padding-left:300px;
+      padding-top: 80px;
+  }
+  div.header > h1 {
+     font-size: 36px;
+     text-indent: 60px;
+  }
+
+  div.remote > h1 {
+      text-align: left;
+      font-size:30px;
+  }
+
+  .images{
+    margin-top: 0px;
+  }
+  /* .right {
+    display: flex;
+  } */
 }
