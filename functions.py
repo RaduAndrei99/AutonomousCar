@@ -40,8 +40,6 @@ def move_forward(speed):
 
     pwm_A.ChangeDutyCycle(speed)
     pwm_B.ChangeDutyCycle(speed)
-    while True:
-        pass
 
 def move_backward(speed):
     global motor_A_0
@@ -164,7 +162,6 @@ def prepare():
     pwm_B.start(dc)
 
 directions = set()
-
 
 def main():
     prepare()

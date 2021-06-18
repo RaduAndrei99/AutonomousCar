@@ -60,7 +60,11 @@ io.on('connection', (socket) => {
 		var childPython = null
 		if (command[0] == "start") {
 			
-			childPython = child_process.spawn('python', ['-c', 'import functions; functions.main()']);
+			childPython = child_process.spawn('python3', ['-c', 'import functions; functions.main()']);
+			childPython.stdin.setEncoding('utf-8');
+			// childPython.stdout.pipe(process.stdout);
+			console.log("Process spawned")	
+
 			childPython.stdout.on('data', function (data) {
 				console.log(`stdout:${data}`);
 				//dataToSend = data.toString();
