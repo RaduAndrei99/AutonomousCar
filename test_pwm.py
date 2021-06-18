@@ -159,7 +159,6 @@ def main():
 	pwm_B.start(dc)
 
 	server = None
-	server_socket = None
 	conn = None
 	speed = 50
 
@@ -168,7 +167,7 @@ def main():
 		conn, addr = server.accept_connection()
 
 		while True:
-			received_message = server.receive_message()
+			received_message = server.receive_message(conn)
 
 			if not received_message or "esc" in received_message:
 				break
@@ -214,8 +213,9 @@ def main():
 		print(ex)
 	finally:
 		clean()
-		close_socket(sock=server_socket)
-		close_socket(sock=conn)
+		server.close_socket()
+		if conn is not None:
+			conn.close()
 
 
 if __name__ == '__main__':
