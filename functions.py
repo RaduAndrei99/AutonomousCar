@@ -3,6 +3,7 @@
 
 import RPi.GPIO as GPIO   # Import the GPIO library.
 import time               # Import time library
+import sys
 # from server import Server
 
 HOST = '192.168.100.47'
@@ -25,7 +26,6 @@ pwm_B = GPIO.PWM(pwm_motor_B, 1000)
 
 
 def move_forward(speed):
-    prepare()
     global motor_A_0
     global motor_A_1
     global motor_B_0
@@ -167,25 +167,17 @@ directions = set()
 
 
 def main():
-    init()
+    prepare()
 
     # main loop of program
     # Print blank line before and after message.
-    print("\nPress Ctl C to quit \n")
-    dc = 0                               # set dc variable to 0 for 0%
-    pwm_A.start(dc)                      # Start PWM with 0% duty cycle
-    pwm_B.start(dc)
+    print("\nPress Ctrl C to quit \n")
 
-    server = None
-    conn = None
     speed = 50
 
     try:
-        server = Server(SERVER_IP=HOST, PORT=PORT)
-        conn, addr = server.accept_connection()
-
         while True:
-            received_message = server.receive_message(conn)
+            received_message = sys.stdin.readline()
 
             if not received_message or "esc" in received_message:
                 break
@@ -231,9 +223,6 @@ def main():
         print(ex)
     finally:
         clean()
-        server.close_socket()
-        if conn is not None:
-            conn.close()
 
 
 if __name__ == '__main__':

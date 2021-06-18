@@ -42,11 +42,8 @@ app.get('/favicon.ico', (req, res) => {
 
 
 app.get('/home', (req, res) => {
-
-
 	res.render('home', {
 		title: "Home",
-
 	})
 });
 
@@ -55,11 +52,15 @@ app.get('/home', (req, res) => {
 io.on('connection', (socket) => {
 	console.log('A user connected');
 	socket.on('commands', (msg) => {
+		
 		var command = msg.split(':')
-		console.log('message: ' + command[0]);
-		var childPython
+		console.log('key: ' + command[0]);
+		console.log('state: ' + command[1]);
+		
+		var childPython = null
 		if (command[0] == "start") {
-			childPython = child_process.spawn('python', ['-c', 'import functions; functions.prepare()']);
+			
+			childPython = child_process.spawn('python', ['-c', 'import functions; functions.main()']);
 			childPython.stdout.on('data', function (data) {
 				console.log(`stdout:${data}`);
 				//dataToSend = data.toString();
@@ -74,44 +75,45 @@ io.on('connection', (socket) => {
 				console.log(`child process close all stdio with code ${code}`);
 				//console.log(data);
 			});
-		} else if (command[1] == "pressed") {
+		} else if (command[1] == "pressed" && childPython != null) {
 			if (command[0] == "w") {
-				childPython = child_process.spawn('python', ['-c', 'import functions; functions.move_forward(50)']);
-				childPython.stdout.on('data', function (data) {
-					console.log(`stdout:${data}`);
-					//dataToSend = data.toString();
-				});
-
-				childPython.stderr.on('data', function (data) {
-					console.log(`stderr:${data}`);
-					//dataToSend += data.toString();
-				});
-
-				childPython.on('close', (code) => {
-					console.log(`child process close all stdio with code ${code}`);
-					//console.log(data);
-				});
+				childPython.stdin.write("w:pressed")
 			}
+
+			// 	childPython.stderr.on('data', function (data) {
+			// 		console.log(`stderr:${data}`);
+			// 		//dataToSend += data.toString();
+			// 	});
+
+			// 	childPython.on('close', (code) => {
+			// 		console.log(`child process close all stdio with code ${code}`);
+			// 		//console.log(data);
+			// 	});
+			// }
 		}
-		else if (command[1] == "released") {
-			childPython.kill();
-			/*
-			const childPython = child_process.spawn('python', ['-c', 'import functions; functions.stop_motors()']);
-			childPython.stdout.on('data', function (data) {
-				console.log(`stdout:${data}`);
-				//dataToSend = data.toString();
-			});
+		else if (command[1] == "released" && childPython != null) {
+			
+			if (command[0] == "w") {
+				childPython.stdin.write("w:released")
+			}
+			// childPython.kill();
+			// /*
+			// const childPython = child_process.spawn('python', ['-c', 'import functions; functions.stop_motors()']);
+			// childPython.stdout.on('data', function (data) {
+			// 	console.log(`stdout:${data}`);
+			// 	//dataToSend = data.toString();
+			// });
 
-			childPython.stderr.on('data', function (data) {
-				console.log(`stderr:${data}`);
-				//dataToSend += data.toString();
-			});
+			// childPython.stderr.on('data', function (data) {
+			// 	console.log(`stderr:${data}`);
+			// 	//dataToSend += data.toString();
+			// });
 
-			childPython.on('close', (code) => {
-				console.log(`child process close all stdio with code ${code}`);
-				//console.log(data);
-			});
-			*/
+			// childPython.on('close', (code) => {
+			// 	console.log(`child process close all stdio with code ${code}`);
+			// 	//console.log(data);
+			// });
+			// */
 		}
 
 	});
