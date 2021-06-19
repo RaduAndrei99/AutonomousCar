@@ -159,7 +159,8 @@ def prepare():
     init()
     dc = 0                               # set dc variable to 0 for 0%
     pwm_A.start(dc)                      # Start PWM with 0% duty cycle
-    pwm_B.start(dc)
+    pwm_B.start(dc
+directions = set()
 
 def main():
     prepare()
@@ -168,7 +169,6 @@ def main():
     # Print blank line before and after message.
     print("\nPress Ctrl C to quit \n")
 
-    directions = set()
     speed = 50
 
     try:
@@ -185,12 +185,11 @@ def main():
             key = command[0]
             state = command[1]
 
-            if "pressed" in state and len(directions) <= 2:
+            if state == "pressed" and len(directions) <= 2:
                 if not (('w' in directions and key == 's') or ('s' in directions and key == 'w') or ('a' in directions and key == 'd') or ('d' in directions and key == 'a')):
-                    print("adaug")
                     directions.add(key)
 
-            if "released" in state and key in directions:
+            if state == "released" and key in directions:
                 directions.remove(key)
 
             print(directions)
@@ -208,6 +207,7 @@ def main():
                 move_to_the_right_backward(speed)
 
             if "w" in directions:
+		print("w")
                 move_forward(speed)
 
             if "s" in directions:
