@@ -1,4 +1,11 @@
-import { StreamCamera, Codec } from 'pi-camera-connect';
+
+const PiCamera = require('pi-camera');
+const myCamera = new PiCamera({
+  mode: 'photo',
+  width: 320,
+  height: 180,
+  nopreview: true,
+});
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser')
@@ -136,28 +143,24 @@ io.on('connection', (socket) => {
 });
 
 
-const runApp = async () => {
-	const streamCamera = new StreamCamera({
-	  codec: Codec.MJPEG,
-	});
-  
-	await streamCamera.startCapture();
-  
-	const image = await streamCamera.takeImage();
-	
-	// Process image...
-	fs.writeFile("./public/SavedImage/image.png", body, function(err) {
-		if (err) throw err;
-	});
-	await streamCamera.stopCapture();
-  };
-  
+
 app.get('/live-feed', (req, res) => {
-	runApp().then(function (value) {
-		res.writeHead(200, {'Content-Type': 'text/txt'});
-		res.end();
-	});
+	console.log("1sec");
+	if(myCamera)
+	{
+		myCamera.snapDataUrl().then((result)=>{
+			//console.log(`<img src="${result}">`);
+
+			res.writeHead(200, {'Content-Type': 'image/jpg'});
+	                res.end(result);
+
+		}).catch((error)=>{
+			console.log(error);
+		});
+	}	
 	/*
+	res.writeHead(200, {'Content-Type': 'text/txt'});
+        res.end();
 	var cameraPython = child_process.spawn('python3', ['cameraScript.py']);
 	cameraPython.stdout.on('data', function (data) {
 		console.log(`stdout:${data}`);
