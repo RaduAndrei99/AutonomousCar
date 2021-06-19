@@ -60,6 +60,8 @@ io.on('connection', (socket) => {
 		var childPython
 		if (command[0] == "start") {
 			childPython = child_process.spawn('python', ['-c', 'import functions; functions.prepare()']);
+			childPython.stdin.setEncoding('utf-8');
+			
 			childPython.stdout.on('data', function (data) {
 				console.log(`stdout:${data}`);
 				//dataToSend = data.toString();
@@ -74,8 +76,11 @@ io.on('connection', (socket) => {
 				console.log(`child process close all stdio with code ${code}`);
 				//console.log(data);
 			});
-		} else if (command[1] == "pressed") {
+		} else if (command[1] == "pressed" && childPython != null) {
 			if (command[0] == "w") {
+				childPython.stdin.write("w:pressed")
+				
+				/*
 				childPython = child_process.spawn('python', ['-c', 'import functions; functions.move_forward(50)']);
 				childPython.stdout.on('data', function (data) {
 					console.log(`stdout:${data}`);
@@ -90,11 +95,15 @@ io.on('connection', (socket) => {
 				childPython.on('close', (code) => {
 					console.log(`child process close all stdio with code ${code}`);
 					//console.log(data);
-				});
+				});*/
 			}
 		}
-		else if (command[1] == "released") {
-			childPython.kill();
+		else if (command[1] == "released" && childPython != null) {
+			
+			if (command[0] == "w") {
+				childPython.stdin.write("w:released")
+			}
+			//childPython.kill();
 			/*
 			const childPython = child_process.spawn('python', ['-c', 'import functions; functions.stop_motors()']);
 			childPython.stdout.on('data', function (data) {
