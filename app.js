@@ -1,3 +1,5 @@
+var raspividStream = require('raspivid-stream');
+var stream = raspividStream();
 
 const PiCamera = require('pi-camera');
 const myCamera = new PiCamera({
@@ -142,7 +144,9 @@ io.on('connection', (socket) => {
 	});
 });
 
-
+videoStream.on('data', (data) => {
+    ws.send(data, { binary: true }, (error) => { if (error) console.error(error); });
+});
 
 app.get('/live-feed', (req, res) => {
 	console.log("1sec");

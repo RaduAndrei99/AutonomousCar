@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-    setInterval(updateImage, 500);
+    //setInterval(updateImage, 500);
 });
 
 function start()
