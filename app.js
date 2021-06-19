@@ -135,9 +135,7 @@ io.on('connection', (socket) => {
 });
 
 app.get('/live-feed', (req, res) => {
-	var cameraPython = child_process.spawn('python3', ['functions.py']);// ['-c', 'import functions; functions.prepare()']);
-	cameraPython.stdin.setEncoding('utf-8');
-	
+	var cameraPython = child_process.spawn('python3', ['cameraScript.py']);
 	cameraPython.stdout.on('data', function (data) {
 		console.log(`stdout:${data}`);
 		//dataToSend = data.toString();
@@ -151,9 +149,10 @@ app.get('/live-feed', (req, res) => {
 	cameraPython.on('close', (code) => {
 		console.log(`child process close all stdio with code ${code}`);
 		//console.log(data);
+		res.writeHead(200, {'Content-Type': 'text/txt'});
+		res.end();
 	});
-
-	res.send('200');
+	
 });
 
 /*

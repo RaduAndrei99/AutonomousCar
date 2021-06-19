@@ -1,7 +1,7 @@
 import sys
 from picamera import PiCamera
 
-DEFAULT_IMAGE_LOCATION = './SavedImage/image.jpg'
+DEFAULT_IMAGE_LOCATION = './public/SavedImage/image.jpg'
 
 if __name__ == '__main__':
 	camera = PiCamera()

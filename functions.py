@@ -27,7 +27,7 @@ pwm_A = GPIO.PWM(pwm_motor_A, 1000)
 pwm_B = GPIO.PWM(pwm_motor_B, 1000)
 
 
-async def move_forward(speed,stop):
+def move_forward(speed,stop):
     global motor_A_0
     global motor_A_1
     global motor_B_0
@@ -153,7 +153,7 @@ def clean():
     GPIO.cleanup()
 
 
-async def stop_motors():
+def stop_motors():
     global pwm_A
     global pwm_B
 
@@ -214,7 +214,8 @@ def main():
                 asyncio.run(move_to_the_right_backward(speed))
 
             if "w" in directions:
-                asyncio.run(move_forward(speed))
+                forward_coroutine = move_forward(speed)
+		forward.__next__()
 		#stop_thread=False
                 #x = threading.Thread(target=move_forward, args=(speed,lambda: stop_thread,))
                 #x.start()

@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-    window.setInterval(updateImage, 16.6);
+    setInterval(updateImage, 500);
 });
 
 function start()
@@ -59,12 +59,15 @@ function moveToTheRightReleased() {
 }
 
 function updateImage(){
-    var xhttp = new XMLHttpRequest();
+   console.log("print la intrare"); 
+   var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            document.getElementById('video-image').src="images/image.jpg";
+            document.getElementById('video-image').src="SavedImage/image.jpg?" + new Date().getTime();;
+	    console.log("merge");
         }
     };
 
     xhttp.open("GET", "/live-feed", true);
+    xhttp.send();
 }
