@@ -23,6 +23,10 @@ textarea {
     height: 200px;
 }
 
+.realTime {       
+    padding-left:750px;
+}
+
 .btn {
     background-color: dodgerblue;
     border: 2px solid black;
@@ -310,7 +314,14 @@ div.remote > h1 {
 
   .images{
     margin-top: 0px;
-  }
+    float: left;
+ }
+  .realTime {
+    margin-left:-1050px;
+}
+  textarea {
+    width: 100%;
+}
   /* .right {
     display: flex;
   } */
