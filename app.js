@@ -8,6 +8,7 @@ const myCamera = new PiCamera({
   height: 180,
   nopreview: true,
 });
+
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser')
@@ -23,12 +24,19 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-
 var net = require('net');
+
 
 var HOST = '192.168.100.47';
 var PORT = 1234;
 var clientPi = new net.Socket();
+
+const AvcServer = require('ws-avc-player/lib/server')
+const { WebSocketServer } = require('@clusterws/cws') // works with ws, legacy uws
+const wss = new WebSocketServer({ port: 3333 })
+const avcServer = new AvcServer(wss, 640, 480) //initial width and height (it adapts to the stream)
+ 
+avcServer.setVideoStream(stream);
 
 // directorul 'views' va conține fișierele .ejs (html + js executat la server)
 app.set('view engine', 'ejs');
@@ -45,6 +53,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // la accesarea din browser adresei http://localhost:6789/ se va returna textul 'Hello World'
 // proprietățile obiectului Request - req - https://expressjs.com/en/api.html#req
 // proprietățile obiectului Response - res - https://expressjs.com/en/api.html#res
+/*
+videoStream.on('data', (data) => {
+    ws.send(data, { binary: true }, (error) => { if (error) console.error(error); });
+});
+*/
+
+
 app.get('/favicon.ico', (req, res) => {
 	res.sendFile("/home/ix_andrei/Documents/Facultate/AN3SEM2/OnlineCompilerPW/PW-Online-Compiler/public/images/favicon.ico");
 	//res.sendFile("/public/images/favicon.ico");
@@ -59,6 +74,7 @@ app.get('/home', (req, res) => {
 
 	})
 });
+
 
 
 var childPython=null
@@ -144,9 +160,7 @@ io.on('connection', (socket) => {
 	});
 });
 
-videoStream.on('data', (data) => {
-    ws.send(data, { binary: true }, (error) => { if (error) console.error(error); });
-});
+
 
 app.get('/live-feed', (req, res) => {
 	console.log("1sec");
