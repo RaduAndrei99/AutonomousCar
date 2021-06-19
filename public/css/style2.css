@@ -19,6 +19,8 @@ footer {
 
 textarea {
     width: 100%;
+    resize: none;
+    height: 200px;
 }
 
 .btn {
@@ -259,7 +261,7 @@ div.right {
 }
 
 .images{
-    margin-top: -500px;
+    margin-top: -850px;
     text-align: center;
 }
 
@@ -273,6 +275,15 @@ div.remote > h1 {
     color:white; 
     padding-left: 170px; 
     font-size:76px;
+}
+
+#video-image {
+    width: 600px;
+    height:400px;
+    text-align:right;
+    float:right;
+    padding-right: 250px;
+    margin-top: 20px;
 }
 
 @media only screen and (max-width: 768px) {

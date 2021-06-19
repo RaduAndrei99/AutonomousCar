@@ -1,7 +1,7 @@
-
+/*
 var raspividStream = require('raspivid-stream');
 var stream = raspividStream();
-/*
+
 const PiCamera = require('pi-camera');
 const myCamera = new PiCamera({
   mode: 'photo',
@@ -31,14 +31,14 @@ var net = require('net');
 var HOST = '192.168.100.47';
 var PORT = 1234;
 var clientPi = new net.Socket();
-
+/*
 const AvcServer = require('ws-avc-player/lib/server')
 const WebSocket = require('ws') // works with ws, legacy uws
 const wss = new WebSocket.Server({ port: 3333 })
 const avcServer = new AvcServer(wss, 640, 480) //initial width and height (it adapts to the stream)
  
 avcServer.setVideoStream(stream);
-
+*/
 // directorul 'views' va conține fișierele .ejs (html + js executat la server)
 app.set('view engine', 'ejs');
 // suport pentru layout-uri - implicit fișierul care reprezintă template-ul site-ului este views/layout.ejs
@@ -164,8 +164,8 @@ io.on('connection', (socket) => {
 
 
 app.get('/live-feed', (req, res) => {
-	console.log("1sec");
-	if(myCamera)
+	//console.log("1sec");
+	/*if(myCamera)
 	{
 		myCamera.snapDataUrl().then((result)=>{
 			//console.log(`<img src="${result}">`);
@@ -176,10 +176,13 @@ app.get('/live-feed', (req, res) => {
 		}).catch((error)=>{
 			console.log(error);
 		});
-	}	
-	/*
-	res.writeHead(200, {'Content-Type': 'text/txt'});
-        res.end();
+	}*/
+
+
+
+	//res.writeHead(200, {'Content-Type': 'text/txt'});
+        //res.end();
+
 	var cameraPython = child_process.spawn('python3', ['cameraScript.py']);
 	cameraPython.stdout.on('data', function (data) {
 		console.log(`stdout:${data}`);
@@ -197,7 +200,7 @@ app.get('/live-feed', (req, res) => {
 		res.writeHead(200, {'Content-Type': 'text/txt'});
 		res.end();
 	});
-	*/
+
 });
 
 /*

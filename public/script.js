@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-    //setInterval(updateImage, 500);
+    setInterval(updateImage, 750);
 });
 
 function start()
@@ -62,7 +62,7 @@ function updateImage(){
    var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            document.getElementById('video-image').src= this.responseText; //"SavedImage/image.jpg?" + new Date().getTime();
+            document.getElementById('video-image').src="SavedImage/image.jpg?" + new Date().getTime();
         }
     };
 

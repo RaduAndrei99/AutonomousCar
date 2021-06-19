@@ -42,9 +42,9 @@ def move_forward(speed,stop):
 
     pwm_A.ChangeDutyCycle(speed)
     pwm_B.ChangeDutyCycle(speed)
-    
     while True:
-	time.sleep(0.001)
+        if stop():
+            break
 
 async def move_backward(speed):
     global motor_A_0
@@ -214,11 +214,11 @@ def main():
                 asyncio.run(move_to_the_right_backward(speed))
 
             if "w" in directions:
-                forward_coroutine = move_forward(speed)
-		forward.__next__()
-		#stop_thread=False
-                #x = threading.Thread(target=move_forward, args=(speed,lambda: stop_thread,))
-                #x.start()
+                #forward_coroutine = move_forward(speed)
+		#forward.__next__()
+                stop_thread=False
+                x = threading.Thread(target=move_forward, args=(speed,lambda: stop_thread,))
+                x.start()
 
             if "s" in directions:
                 asyncio.run(move_backward(speed))
