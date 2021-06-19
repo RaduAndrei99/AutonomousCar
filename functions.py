@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO   # Import the GPIO library.
 import time               # Import time library
 import sys
 import threading
+import asyncio
 # from server import Server
 
 HOST = '192.168.100.47'
@@ -26,7 +27,7 @@ pwm_A = GPIO.PWM(pwm_motor_A, 1000)
 pwm_B = GPIO.PWM(pwm_motor_B, 1000)
 
 
-def move_forward(speed,stop):
+async def move_forward(speed,stop):
     global motor_A_0
     global motor_A_1
     global motor_B_0
@@ -41,11 +42,11 @@ def move_forward(speed,stop):
 
     pwm_A.ChangeDutyCycle(speed)
     pwm_B.ChangeDutyCycle(speed)
+    
     while True:
-        if stop():
-            break
+	time.sleep(0.001)
 
-def move_backward(speed):
+async def move_backward(speed):
     global motor_A_0
     global motor_A_1
     global motor_B_0
@@ -62,7 +63,7 @@ def move_backward(speed):
     pwm_B.ChangeDutyCycle(speed)
 
 
-def move_to_the_left_forward(speed):
+async def move_to_the_left_forward(speed):
     global motor_A_0
     global motor_A_1
     global motor_B_0
@@ -79,7 +80,7 @@ def move_to_the_left_forward(speed):
     pwm_B.ChangeDutyCycle(speed)
 
 
-def move_to_the_right_forward(speed):
+async def move_to_the_right_forward(speed):
     global motor_A_0
     global motor_A_1
     global motor_B_0
@@ -96,7 +97,7 @@ def move_to_the_right_forward(speed):
     pwm_B.ChangeDutyCycle(speed-10)
 
 
-def move_to_the_left_backward(speed):
+async def move_to_the_left_backward(speed):
     global motor_A_0
     global motor_A_1
     global motor_B_0
@@ -113,7 +114,7 @@ def move_to_the_left_backward(speed):
     pwm_B.ChangeDutyCycle(speed)
 
 
-def move_to_the_right_backward(speed):
+async def move_to_the_right_backward(speed):
     global motor_A_0
     global motor_A_1
     global motor_B_0
@@ -152,7 +153,7 @@ def clean():
     GPIO.cleanup()
 
 
-def stop_motors():
+async def stop_motors():
     global pwm_A
     global pwm_B
 
@@ -201,24 +202,25 @@ def main():
             # print(directions)
 
             if "w" in directions and "a" in directions:
-                move_to_the_left_forward(speed)
+                asyncio.run(move_to_the_left_forward(speed))
 
             if "w" in directions and "d" in directions:
-                move_to_the_right_forward(speed)
+                asyncio.run(move_to_the_right_forward(speed))
 
             if "s" in directions and "a" in directions:
-                move_to_the_left_backward(speed)
+                asyncio.run(move_to_the_left_backward(speed))
 
             if "s" in directions and "d" in directions:
-                move_to_the_right_backward(speed)
+                asyncio.run(move_to_the_right_backward(speed))
 
             if "w" in directions:
-                stop_thread=False
-                x = threading.Thread(target=move_forward, args=(speed,lambda: stop_thread,))
-                x.start()
+                asyncio.run(move_forward(speed))
+		#stop_thread=False
+                #x = threading.Thread(target=move_forward, args=(speed,lambda: stop_thread,))
+                #x.start()
 
             if "s" in directions:
-                move_backward(speed)
+                asyncio.run(move_backward(speed))
 
             if len(directions) == 0:
                 stop_thread=True
