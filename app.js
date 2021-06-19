@@ -1,6 +1,7 @@
+
 var raspividStream = require('raspivid-stream');
 var stream = raspividStream();
-
+/*
 const PiCamera = require('pi-camera');
 const myCamera = new PiCamera({
   mode: 'photo',
@@ -8,7 +9,7 @@ const myCamera = new PiCamera({
   height: 180,
   nopreview: true,
 });
-
+*/
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser')
@@ -32,8 +33,8 @@ var PORT = 1234;
 var clientPi = new net.Socket();
 
 const AvcServer = require('ws-avc-player/lib/server')
-const { WebSocketServer } = require('@clusterws/cws') // works with ws, legacy uws
-const wss = new WebSocketServer({ port: 3333 })
+const WebSocket = require('ws') // works with ws, legacy uws
+const wss = new WebSocket.Server({ port: 3333 })
 const avcServer = new AvcServer(wss, 640, 480) //initial width and height (it adapts to the stream)
  
 avcServer.setVideoStream(stream);
