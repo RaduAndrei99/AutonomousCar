@@ -16,7 +16,6 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 var net = require('net');
 
-
 var HOST = '192.168.100.47';
 var PORT = 1234;
 var clientPi = new net.Socket();
@@ -48,9 +47,20 @@ app.get('/home', (req, res) => {
 	})
 });
 
+function GetCurrentLogTime()
+{
+	var today = new Date();
+	var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	var dateTime = '['+date+' '+time+']';
+
+	return dateTime
+}
+
 var childPython = null
 io.on('connection', (socket) => {
 	console.log('A user connected');
+        socket.send(GetCurrentLogTime() + " " + "Connection successfully")
 
 	socket.on('commands', (msg) => {
 		var command = msg.split(':')
@@ -73,36 +83,44 @@ io.on('connection', (socket) => {
 				console.log(`child process close all stdio with code ${code}`);
 				//console.log(data);
 			});
-			console.log(command[1].length)
+			socket.send(GetCurrentLogTime() + " " + "Python script running...")
 		}
 		console.log(command[1] == "pressed" && childPython != null)
 		if (command[1] == "pressed" && childPython != null) {
 
 			if (command[0] == "w") {
 				childPython.stdin.write("w:pressed\n");
+				socket.send(GetCurrentLogTime() + " " + "Forward pressed")
 			}
 			else if (command[0] == "a") {
                                 childPython.stdin.write("w:pressed\n");
 				childPython.stdin.write("a:pressed\n");
+				socket.send(GetCurrentLogTime() + " " + "Left pressed")
 			} else if (command[0] == "s") {
 				childPython.stdin.write("s:pressed\n");
+				socket.send(GetCurrentLogTime() + " " + "Back pressed")
 			} else if (command[0] == "d") {
 				childPython.stdin.write("w:pressed\n");
                                 childPython.stdin.write("d:pressed\n");
+				socket.send(GetCurrentLogTime() + " " + "Right pressed")
 			}
 		}
 		else if (command[1] == "released" && childPython != null) {
 
 			if (command[0] == "w") {
 				childPython.stdin.write("w:released\n")
+				socket.send(GetCurrentLogTime() + " " + "Forward released")
 			} else if (command[0] == "a") {
 				childPython.stdin.write("a:released\n");
 				childPython.stdin.write("w:released\n");
+				socket.send(GetCurrentLogTime() + " " + "Left released")
 			} else if (command[0] == "s") {
 				childPython.stdin.write("s:released\n");
+				socket.send(GetCurrentLogTime() + " " + "Back released")
 			} else if (command[0] == "d") {
 				childPython.stdin.write("w:released\n");
 				childPython.stdin.write("d:released\n");
+				socket.send(GetCurrentLogTime() + " " + "Right released")
 			}
 		}
 
@@ -135,5 +153,4 @@ app.get('/live-feed', (req, res) => {
 
 });
 
-
-server.listen(port, () => console.log(`Serverul rulează la adresa http://localhost:1235/home`));
+server.listen(port, () => console.log(`Serverul rulează la adresa http://localhost:${port}/home`));

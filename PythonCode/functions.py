@@ -39,6 +39,15 @@ running_as = False
 running_ds = False
 
 
+def rear_lights_on():
+    GPIO.output(37, 1)
+    GPIO.output(35, 1)
+
+def rear_lights_off():
+    GPIO.output(37, 0)
+    GPIO.output(35, 0)
+
+
 def move_forward(speed):
 
     global motor_A_0
@@ -75,9 +84,10 @@ def move_backward(speed):
 
     pwm_A.ChangeDutyCycle(speed)
     pwm_B.ChangeDutyCycle(speed)
-
+    rear_lights_on()
     while running_s:
         pass
+    rear_lights_off()
     print("Backward execution stopped")
 
 
@@ -180,9 +190,12 @@ def init():
     GPIO.setup(motor_A_1, GPIO.OUT)
     GPIO.setup(motor_B_0, GPIO.OUT)
     GPIO.setup(motor_B_1, GPIO.OUT)
+
     GPIO.setup(pwm_motor_A, GPIO.OUT)
     GPIO.setup(pwm_motor_B, GPIO.OUT)
-
+    GPIO.setup(37, GPIO.OUT)
+    GPIO.setup(35, GPIO.OUT)
+    GPIO.setwarnings(False)
 
 def clean():
     pwm_A.stop()
@@ -342,6 +355,7 @@ def main():
     except Exception as ex:
         print(ex)
     finally:
+        print("clear nasol")
         clean()
 
 

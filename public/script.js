@@ -12,6 +12,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     setInterval(updateImage, 750);
+    var textarea = document.getElementById('log');
+    textarea.readOnly = true;
+});
+
+socket.on('message', function(data)
+{
+    document.getElementById("log").append(data+"\n")
 });
 
 function start()
