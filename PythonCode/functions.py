@@ -95,7 +95,7 @@ def move_to_the_left_forward(speed):
     GPIO.output(motor_B_0, GPIO.HIGH)
     GPIO.output(motor_B_1, GPIO.LOW)
 
-    pwm_A.ChangeDutyCycle(speed-10)
+    pwm_A.ChangeDutyCycle(speed-30)
     pwm_B.ChangeDutyCycle(speed)
 
     while running_aw:
@@ -117,7 +117,7 @@ def move_to_the_right_forward(speed):
     GPIO.output(motor_B_1, GPIO.LOW)
 
     pwm_A.ChangeDutyCycle(speed)
-    pwm_B.ChangeDutyCycle(speed-10)
+    pwm_B.ChangeDutyCycle(speed-30)
 
     while running_dw:
         pass
@@ -137,7 +137,7 @@ def move_to_the_left_backward(speed):
     GPIO.output(motor_B_0, GPIO.LOW)
     GPIO.output(motor_B_1, GPIO.HIGH)
 
-    pwm_A.ChangeDutyCycle(speed-10)
+    pwm_A.ChangeDutyCycle(speed-30)
     pwm_B.ChangeDutyCycle(speed)
 
     while running_as:
@@ -160,7 +160,7 @@ def move_to_the_right_backward(speed):
     GPIO.output(motor_B_1, GPIO.HIGH)
 
     pwm_A.ChangeDutyCycle(speed)
-    pwm_B.ChangeDutyCycle(speed-10)
+    pwm_B.ChangeDutyCycle(speed-30)
 
     while running_ds:
         pass

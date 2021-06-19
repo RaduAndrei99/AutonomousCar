@@ -37,7 +37,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.get('/favicon.ico', (req, res) => {
-	res.sendFile("./public/images/favicon.ico");
+	res.sendFile("/home/pi/AutonomousCar/public/images/favicon.ico");
 });
 
 
@@ -82,11 +82,13 @@ io.on('connection', (socket) => {
 				childPython.stdin.write("w:pressed\n");
 			}
 			else if (command[0] == "a") {
+                                childPython.stdin.write("w:pressed\n");
 				childPython.stdin.write("a:pressed\n");
 			} else if (command[0] == "s") {
 				childPython.stdin.write("s:pressed\n");
 			} else if (command[0] == "d") {
-				childPython.stdin.write("d:pressed\n");
+				childPython.stdin.write("w:pressed\n");
+                                childPython.stdin.write("d:pressed\n");
 			}
 		}
 		else if (command[1] == "released" && childPython != null) {
@@ -95,10 +97,12 @@ io.on('connection', (socket) => {
 				childPython.stdin.write("w:released\n")
 			} else if (command[0] == "a") {
 				childPython.stdin.write("a:released\n");
+				childPython.stdin.write("w:released\n");
 			} else if (command[0] == "s") {
-				childPython.stdin.write("a:released\n");
+				childPython.stdin.write("s:released\n");
 			} else if (command[0] == "d") {
-				childPython.stdin.write("a:released\n");
+				childPython.stdin.write("w:released\n");
+				childPython.stdin.write("d:released\n");
 			}
 		}
 
