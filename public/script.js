@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+    window.setInterval(updateImage, 16.6);
 });
 
 function start()
@@ -55,4 +56,15 @@ function moveToTheRightPressed() {
 function moveToTheRightReleased() {
     console.log("stop right");
     socket.emit('commands', "d:released")
+}
+
+function updateImage(){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById('video-image').src="images/image.jpg";
+        }
+    };
+
+    xhttp.open("GET", "/live-feed", true);
 }

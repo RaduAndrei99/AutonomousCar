@@ -134,7 +134,27 @@ io.on('connection', (socket) => {
 	});
 });
 
+app.get('/live-feed', (req, res) => {
+	var cameraPython = child_process.spawn('python3', ['functions.py']);// ['-c', 'import functions; functions.prepare()']);
+	cameraPython.stdin.setEncoding('utf-8');
+	
+	cameraPython.stdout.on('data', function (data) {
+		console.log(`stdout:${data}`);
+		//dataToSend = data.toString();
+	});
 
+	cameraPython.stderr.on('data', function (data) {
+		console.log(`stderr:${data}`);
+		//dataToSend += data.toString();
+	});
+
+	cameraPython.on('close', (code) => {
+		console.log(`child process close all stdio with code ${code}`);
+		//console.log(data);
+	});
+
+	res.send('200');
+});
 
 /*
 app.get('/chat', (req, res) => {
