@@ -1,3 +1,4 @@
+import { StreamCamera, Codec } from 'pi-camera-connect';
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser')
@@ -134,7 +135,29 @@ io.on('connection', (socket) => {
 	});
 });
 
+
+const runApp = async () => {
+	const streamCamera = new StreamCamera({
+	  codec: Codec.MJPEG,
+	});
+  
+	await streamCamera.startCapture();
+  
+	const image = await streamCamera.takeImage();
+	
+	// Process image...
+	fs.writeFile("./public/SavedImage/image.png", body, function(err) {
+		if (err) throw err;
+	});
+	await streamCamera.stopCapture();
+  };
+  
 app.get('/live-feed', (req, res) => {
+	runApp().then(function (value) {
+		res.writeHead(200, {'Content-Type': 'text/txt'});
+		res.end();
+	});
+	/*
 	var cameraPython = child_process.spawn('python3', ['cameraScript.py']);
 	cameraPython.stdout.on('data', function (data) {
 		console.log(`stdout:${data}`);
@@ -152,7 +175,7 @@ app.get('/live-feed', (req, res) => {
 		res.writeHead(200, {'Content-Type': 'text/txt'});
 		res.end();
 	});
-	
+	*/
 });
 
 /*
