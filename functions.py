@@ -4,6 +4,7 @@
 import RPi.GPIO as GPIO   # Import the GPIO library.
 import time               # Import time library
 import sys
+import threading
 # from server import Server
 
 HOST = '192.168.100.47'
@@ -25,7 +26,7 @@ pwm_A = GPIO.PWM(pwm_motor_A, 1000)
 pwm_B = GPIO.PWM(pwm_motor_B, 1000)
 
 
-def move_forward(speed):
+def move_forward(speed,stop):
     global motor_A_0
     global motor_A_1
     global motor_B_0
@@ -40,6 +41,9 @@ def move_forward(speed):
 
     pwm_A.ChangeDutyCycle(speed)
     pwm_B.ChangeDutyCycle(speed)
+    while True:
+        if stop():
+            break
 
 def move_backward(speed):
     global motor_A_0
@@ -171,7 +175,8 @@ def main():
     print("\nPress Ctrl C to quit \n")
 
     speed = 50
-
+    stop_thread=False
+    x = None
     try:
         while True:
             received_message = sys.stdin.readline()
@@ -186,14 +191,14 @@ def main():
             key = command[0]
             state = command[1]
 
-            if state == "pressed" and len(directions) <= 2:
+            if state == "pressed\n" and len(directions) <= 2:
                 if not (('w' in directions and key == 's') or ('s' in directions and key == 'w') or ('a' in directions and key == 'd') or ('d' in directions and key == 'a')):
                     directions.add(key)
 
-            if state == "released" and key in directions:
+            if state == "released\n" and key in directions:
                 directions.remove(key)
 
-            print(directions)
+            # print(directions)
 
             if "w" in directions and "a" in directions:
                 move_to_the_left_forward(speed)
@@ -208,12 +213,17 @@ def main():
                 move_to_the_right_backward(speed)
 
             if "w" in directions:
-                move_forward(speed)
+                stop_thread=False
+                x = threading.Thread(target=move_forward, args=(speed,lambda: stop_thread,))
+                x.start()
 
             if "s" in directions:
                 move_backward(speed)
 
             if len(directions) == 0:
+                stop_thread=True
+                x.join()
+                print("nu intra")
                 stop_motors()
 
     except Exception as ex:

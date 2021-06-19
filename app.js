@@ -51,15 +51,15 @@ app.get('/home', (req, res) => {
 });
 
 
-
+var childPython=null
 io.on('connection', (socket) => {
 	console.log('A user connected');
+	
 	socket.on('commands', (msg) => {
 		var command = msg.split(':')
-		console.log('message: ' + command[0]);
-		var childPython
+		console.log('key: ' + command[0]+'=>command: ' +command[1]);
 		if (command[0] == "start") {
-			childPython = child_process.spawn('python', ['-c', 'import functions; functions.prepare()']);
+			childPython = child_process.spawn('python3', ['functions.py']);// ['-c', 'import functions; functions.prepare()']);
 			childPython.stdin.setEncoding('utf-8');
 			
 			childPython.stdout.on('data', function (data) {
@@ -76,9 +76,14 @@ io.on('connection', (socket) => {
 				console.log(`child process close all stdio with code ${code}`);
 				//console.log(data);
 			});
-		} else if (command[1] == "pressed" && childPython != null) {
+                        console.log(command[1].length)
+		} 
+		console.log(command[1]=="pressed")
+		console.log(command[1]=="pressed" &&childPython != null) 
+		if (command[1] == "pressed" && childPython != null) {
 			if (command[0] == "w") {
-				childPython.stdin.write("w:pressed")
+				console.log("dasffffffffffffffffff")
+				childPython.stdin.write("w:pressed\n")
 				
 				/*
 				childPython = child_process.spawn('python', ['-c', 'import functions; functions.move_forward(50)']);
@@ -101,7 +106,7 @@ io.on('connection', (socket) => {
 		else if (command[1] == "released" && childPython != null) {
 			
 			if (command[0] == "w") {
-				childPython.stdin.write("w:released")
+				childPython.stdin.write("w:released\n")
 			}
 			//childPython.kill();
 			/*
