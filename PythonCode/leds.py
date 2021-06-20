@@ -25,28 +25,32 @@ def rear_lights_off():
     GPIO.output(35, 0)
 
 
-def leds_on_right():
+def leds_on_right(stop):
     while True:
         for i in [7, 5, 3]:
             GPIO.output(i, 1)
             sleep(0.3)
-        GPIO.setwanings(False)
+        GPIO.setwarnings(False)
         for j in [7, 5, 3]:
             GPIO.output(j, 0)
         GPIO.setwarnings(False)
         sleep(0.3)
+        if stop():
+            break
 
 
-def leds_on_left():
+def leds_on_left(stop):
     while True:
         for i in [19, 21, 23]:
             GPIO.output(i, 1)
             sleep(0.3)
-        GPIO.setwanings(False)
+        GPIO.setwarnings(False)
         for j in [19, 21, 23]:
             GPIO.output(j, 0)
         GPIO.setwarnings(False)
         sleep(0.3)
+        if stop():
+            break
 
 
 def emergency_leds():
@@ -89,6 +93,11 @@ def main():
     # main loop of program
     # Print blank line before and after message.
     print("\nPress Ctrl C to quit \n")
+    thread_left_state = False
+    thread_right_state = False
+
+    thread_left = threading.Thread(target = leds_on_left, args =(lambda : thread_left_state, ))
+    thread_right = threading.Thread(target = leds_on_right, args =(lambda: thread_right_state, ))
 
     try:
         while True:
@@ -117,14 +126,22 @@ def main():
 
             if key == "leftSignal":
                 if state == "on\n":
-                    leds_on_left()
+                    thread_left_state=False
+                    thread_left = threading.Thread(target = leds_on_left, args =(lambda : thread_left_state, ))
+                    thread_left.start()
                 elif state == "off\n":
+                    thread_left_state=True
+                    thread_left.join()
                     leds_off_left()
-			
+
             if key == "rightSignal":
                 if state == "on\n":
-                    leds_on_right()
+                    thread_right_state=False
+                    thread_right = threading.Thread(target = leds_on_right, args =(lambda: thread_right_state, ))
+                    thread_right.start()
                 elif state == "off\n":
+                    thread_right_state=True
+                    thread_right.join()
                     leds_off_right()
 
     except Exception as ex:
