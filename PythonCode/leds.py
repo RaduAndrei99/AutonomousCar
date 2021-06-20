@@ -76,6 +76,14 @@ def leds_off():
         GPIO.output(i[1], 0)
     GPIO.setwarnings(False)
 
+def leds_off_left():
+    for i in [7, 5, 3, ]:
+        GPIO.output(i, 0)
+    GPIO.setwarnings(False)
+def leds_off_right():
+    for i in [19, 21, 23]:
+        GPIO.output(i, 0)
+    GPIO.setwarnings(False)
 
 def main():
     # main loop of program
@@ -106,6 +114,18 @@ def main():
                     rear_lights_on()
                 elif state == "off\n":
                     rear_lights_off()
+
+            if key == "leftSignal":
+                if state == "on\n":
+                    leds_on_left()
+                elif state == "off\n":
+                    leds_off_left()
+			
+            if key == "rightSignal":
+                if state == "on\n":
+                    leds_on_right()
+                elif state == "off\n":
+                    leds_off_right()
 
     except Exception as ex:
         print(ex)

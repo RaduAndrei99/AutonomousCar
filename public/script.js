@@ -38,6 +38,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    var checkbox = document.querySelector("input[id='leftSignal']");
+    checkbox.addEventListener('change', function () {
+        if (this.checked) {
+            socket.emit('lights', "leftSignal:on\n")
+        } else {
+            socket.emit('lights', "leftSignal:off\n")
+        }
+    });
+
+    var checkbox = document.querySelector("input[id='rightSignal']");
+    checkbox.addEventListener('change', function () {
+        if (this.checked) {
+            socket.emit('lights', "rightSignal:on\n")
+        } else {
+            socket.emit('lights', "rightSignal:off\n")
+        }
+    });
+
+
 });
 
 socket.on('message', function (data) {
