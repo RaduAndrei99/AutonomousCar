@@ -96,13 +96,14 @@ def main():
     thread_left_state = False
     thread_right_state = False
 
-    thread_left = threading.Thread(target = leds_on_left, args =(lambda : thread_left_state, ))
-    thread_right = threading.Thread(target = leds_on_right, args =(lambda: thread_right_state, ))
+    thread_left = None
+    thread_right = None
 
     try:
         while True:
             received_message = sys.stdin.readline()
 
+            sys.stderr.write(received_message)
             if not received_message or "esc" in received_message:
                 break
 
@@ -147,6 +148,8 @@ def main():
     except Exception as ex:
         print(ex)
     finally:
+        thread_right_state=True
+        thread_left_state=True
         leds_off()
         rear_lights_off()
 
