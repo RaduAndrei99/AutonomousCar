@@ -91,19 +91,20 @@ def main():
 
             # DO SOMETHING WITH DATA
             print("Mesaj primit: " + received_message)
+            # received_message.strip()
             command = received_message.split(':')
             key = command[0]
             state = command[1]
             if key == "daytimeLights":
-                if state == "on":
+                if state == "on\n":
                     leds_on()
-                elif state == "off":
+                elif state == "off\n":
                     leds_off()
-            
+
             if key == "brakeLights":
-                if state == "on":
+                if state == "on\n":
                     rear_lights_on()
-                elif state == "off":
+                elif state == "off\n":
                     rear_lights_off()
 
     except Exception as ex:

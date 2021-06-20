@@ -64,11 +64,11 @@ io.on('connection', (socket) => {
 	
 	socket.on('lights', (msg) => {
 		if (carLightsProcess != null) {
-			carMovementProcess.stdin.write(msg);
+			carLightsProcess.stdin.write(msg);
 				socket.send(GetCurrentLogTime() + " " + msg)
 		}
 		else{
-			throw console.error("lightsProcess doesn't exist");
+			console.log("lightsProcess doesn't exist");
 		}
 	});
 

@@ -23,18 +23,18 @@ document.addEventListener("DOMContentLoaded", function () {
     var checkbox = document.querySelector("input[id='daytimeLights']");
     checkbox.addEventListener('change', function () {
         if (this.checked) {
-            socket.emit('lights', "daytimeLights:on")
+            socket.emit('lights', "daytimeLights:on\n")
         } else {
-            socket.emit('lights', "daytimeLights:off")
+            socket.emit('lights', "daytimeLights:off\n")
         }
     });
 
     var checkbox = document.querySelector("input[id='brakeLights']");
     checkbox.addEventListener('change', function () {
         if (this.checked) {
-            socket.emit('lights', "brakeLights:on")
+            socket.emit('lights', "brakeLights:on\n")
         } else {
-            socket.emit('lights', "brakeLights:off")
+            socket.emit('lights', "brakeLights:off\n")
         }
     });
 
