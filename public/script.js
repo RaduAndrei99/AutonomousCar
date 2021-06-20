@@ -67,6 +67,11 @@ function start() {
     console.log("start");
     socket.emit('commands', "start:start")
 }
+function stop() {
+    console.log("stop");
+    socket.emit('commands', "stop:stop")
+    socket.emit('lights', "esc")
+}
 function moveForwardPressed() {
     console.log("go forward");
     socket.emit('commands', "w:pressed")

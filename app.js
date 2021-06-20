@@ -61,15 +61,18 @@ var carLightsProcess = null;
 io.on('connection', (socket) => {
 	console.log('A user connected');
 	socket.send(GetCurrentLogTime() + " " + "Connection successfully")
-	
+
 	socket.on('lights', (msg) => {
 		if (carLightsProcess != null) {
 			carLightsProcess.stdin.write(msg);
-				socket.send(GetCurrentLogTime() + " " + msg)
+			socket.send(GetCurrentLogTime() + " " + msg)
+			if(msg=="esc")
+				carLightsProcess =null
 		}
 		else{
 			console.log("lightsProcess doesn't exist");
 		}
+		
 	});
 
 
@@ -152,6 +155,14 @@ io.on('connection', (socket) => {
 				carMovementProcess.stdin.write("w:released\n");
 				carMovementProcess.stdin.write("d:released\n");
 				socket.send(GetCurrentLogTime() + " " + "Right released")
+			}
+		}
+		if (command[0] == "stop") {
+			if(carMovementProcess != null)
+			{
+				carMovementProcess.stdin.write("esc");
+				carMovementProcess=null
+				socket.send(GetCurrentLogTime() + " " + "Turning off...")
 			}
 		}
 
