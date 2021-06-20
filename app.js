@@ -47,86 +47,117 @@ app.get('/home', (req, res) => {
 	})
 });
 
-function GetCurrentLogTime()
-{
+function GetCurrentLogTime() {
 	var today = new Date();
-	var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+	var date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
 	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-	var dateTime = '['+date+' '+time+']';
+	var dateTime = '[' + date + ' ' + time + ']';
 
 	return dateTime
 }
 
-var childPython = null
+var carMovementProcess = null;
+var carLightsProcess = null;
 io.on('connection', (socket) => {
 	console.log('A user connected');
-        socket.send(GetCurrentLogTime() + " " + "Connection successfully")
+	socket.send(GetCurrentLogTime() + " " + "Connection successfully")
+	
+	socket.on('lights', (msg) => {
+		if (carLightsProcess != null) {
+			carMovementProcess.stdin.write(msg);
+				socket.send(GetCurrentLogTime() + " " + msg)
+		}
+		else{
+			throw console.error("lightsProcess doesn't exist");
+		}
+	});
+
 
 	socket.on('commands', (msg) => {
 		var command = msg.split(':')
 		console.log('key: ' + command[0] + '=> command: ' + command[1]);
 		if (command[0] == "start") {
-			childPython = child_process.spawn('python3', ['./PythonCode/functions.py']);
-			childPython.stdin.setEncoding('utf-8');
+			carMovementProcess = child_process.spawn('python3', ['./PythonCode/functions.py']);
+			carMovementProcess.stdin.setEncoding('utf-8');
 
-			childPython.stdout.on('data', function (data) {
+
+			carMovementProcess.stdout.on('data', function (data) {
 				console.log(`stdout:${data}`);
 				//dataToSend = data.toString();
 			});
 
-			childPython.stderr.on('data', function (data) {
+			carMovementProcess.stderr.on('data', function (data) {
 				console.log(`stderr:${data}`);
 				//dataToSend += data.toString();
 			});
 
-			childPython.on('close', (code) => {
-				console.log(`child process close all stdio with code ${code}`);
+			carMovementProcess.on('close', (code) => {
+				console.log(`movement process close all stdio with code ${code}`);
 				//console.log(data);
 			});
+
+			carLightsProcess = child_process.spawn('python3', ['./PythonCode/leds.py']);
+			carLightsProcess.stdin.setEncoding('utf-8');
+
+			carLightsProcess.stdout.on('data', function (data) {
+				console.log(`stdout:${data}`);
+				//dataToSend = data.toString();
+			});
+
+			carLightsProcess.stderr.on('data', function (data) {
+				console.log(`stderr:${data}`);
+				//dataToSend += data.toString();
+			});
+
+			carLightsProcess.on('close', (code) => {
+				console.log(`lights process close all stdio with code ${code}`);
+				//console.log(data);
+			});
+
 			socket.send(GetCurrentLogTime() + " " + "Python script running...")
 		}
-		console.log(command[1] == "pressed" && childPython != null)
-		if (command[1] == "pressed" && childPython != null) {
+		console.log(command[1] == "pressed" && carMovementProcess != null)
+		if (command[1] == "pressed" && carMovementProcess != null) {
 
 			if (command[0] == "w") {
-				childPython.stdin.write("w:pressed\n");
+				carMovementProcess.stdin.write("w:pressed\n");
 				socket.send(GetCurrentLogTime() + " " + "Forward pressed")
 			}
 			else if (command[0] == "a") {
-                                childPython.stdin.write("w:pressed\n");
-				childPython.stdin.write("a:pressed\n");
+				carMovementProcess.stdin.write("w:pressed\n");
+				carMovementProcess.stdin.write("a:pressed\n");
 				socket.send(GetCurrentLogTime() + " " + "Left pressed")
 			} else if (command[0] == "s") {
-				childPython.stdin.write("s:pressed\n");
+				carMovementProcess.stdin.write("s:pressed\n");
 				socket.send(GetCurrentLogTime() + " " + "Back pressed")
 			} else if (command[0] == "d") {
-				childPython.stdin.write("w:pressed\n");
-                                childPython.stdin.write("d:pressed\n");
+				carMovementProcess.stdin.write("w:pressed\n");
+				carMovementProcess.stdin.write("d:pressed\n");
 				socket.send(GetCurrentLogTime() + " " + "Right pressed")
 			}
 		}
-		else if (command[1] == "released" && childPython != null) {
+		else if (command[1] == "released" && carMovementProcess != null) {
 
 			if (command[0] == "w") {
-				childPython.stdin.write("w:released\n")
+				carMovementProcess.stdin.write("w:released\n")
 				socket.send(GetCurrentLogTime() + " " + "Forward released")
 			} else if (command[0] == "a") {
-				childPython.stdin.write("a:released\n");
-				childPython.stdin.write("w:released\n");
+				carMovementProcess.stdin.write("a:released\n");
+				carMovementProcess.stdin.write("w:released\n");
 				socket.send(GetCurrentLogTime() + " " + "Left released")
 			} else if (command[0] == "s") {
-				childPython.stdin.write("s:released\n");
+				carMovementProcess.stdin.write("s:released\n");
 				socket.send(GetCurrentLogTime() + " " + "Back released")
 			} else if (command[0] == "d") {
-				childPython.stdin.write("w:released\n");
-				childPython.stdin.write("d:released\n");
+				carMovementProcess.stdin.write("w:released\n");
+				carMovementProcess.stdin.write("d:released\n");
 				socket.send(GetCurrentLogTime() + " " + "Right released")
 			}
 		}
 
 	});
 	socket.on('disconnect', () => {
-		console.log('user disconnected');
+		console.log('User disconnected');
 	});
 });
 

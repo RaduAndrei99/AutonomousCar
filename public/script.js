@@ -14,21 +14,37 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(updateImage, 750);
     var textarea = document.getElementById('log');
     textarea.readOnly = true;
-    
-    setTimeout(function()
-    {
+
+    setTimeout(function () {
         var textArea = document.getElementById('log');
         textArea.scrollTop = textArea.scrollHeight;
     }, 100);
+
+    var checkbox = document.querySelector("input[id='daytimeLights']");
+    checkbox.addEventListener('change', function () {
+        if (this.checked) {
+            socket.emit('lights', "daytimeLights:on")
+        } else {
+            socket.emit('lights', "daytimeLights:off")
+        }
+    });
+
+    var checkbox = document.querySelector("input[id='brakeLights']");
+    checkbox.addEventListener('change', function () {
+        if (this.checked) {
+            socket.emit('lights', "brakeLights:on")
+        } else {
+            socket.emit('lights', "brakeLights:off")
+        }
+    });
+
 });
 
-socket.on('message', function(data)
-{
-    document.getElementById("log").append(data+"\n")
+socket.on('message', function (data) {
+    document.getElementById("log").append(data + "\n")
 });
 
-function start()
-{
+function start() {
     console.log("start");
     socket.emit('commands', "start:start")
 }
@@ -71,11 +87,11 @@ function moveToTheRightReleased() {
     socket.emit('commands', "d:released")
 }
 
-function updateImage(){
-   var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+function updateImage() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            document.getElementById('video-image').src="SavedImage/image.jpg?" + new Date().getTime();
+            document.getElementById('video-image').src = "SavedImage/image.jpg?" + new Date().getTime();
         }
     };
 
