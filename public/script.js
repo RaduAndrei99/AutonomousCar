@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(updateImage, 750);
     var textarea = document.getElementById('log');
     textarea.readOnly = true;
+    
+    setTimeout(function()
+    {
+        var textArea = document.getElementById('log');
+        textArea.scrollTop = textArea.scrollHeight;
+    }, 100);
 });
 
 socket.on('message', function(data)

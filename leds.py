@@ -65,13 +65,13 @@ def leds_off():
 		GPIO.output(i[1], 0)
 	GPIO.setwarnings(False)
 
-while True:
-	try:
-		#emergency_leds()
-		leds_on()
-	except:
-		print("Leds off")
-		break
+#while True:
+try:
+	#emergency_leds()
+	leds_on()
+except:
+	print("Leds off")
+	# break
 
 
 leds_off()
